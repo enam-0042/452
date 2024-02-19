@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.4c647eb1.css",
+    "main.js": "/static/js/main.bb4f6f6b.js",
+    "static/media/sustlogo.png": "/static/media/sustlogo.3525e54423b13578fae3.png",
+    "index.html": "/index.html",
+    "main.4c647eb1.css.map": "/static/css/main.4c647eb1.css.map",
+    "main.bb4f6f6b.js.map": "/static/js/main.bb4f6f6b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4c647eb1.css",
+    "static/js/main.bb4f6f6b.js"
+  ]
+}
