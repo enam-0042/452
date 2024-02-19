@@ -470,7 +470,7 @@ const getTabulationSheet = async (req, res) => {
         
         // Create promises for both database queries
         const query = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' ;`;
-        const query1 = 'SELECT  * from tbl_course ';
+        const query1 = 'SELECT  course_id, course_credits from tbl_course ';
 
         // Execute both queries concurrently using Promise.all
         const [rows, course_rows] = await Promise.all([
@@ -485,10 +485,30 @@ const getTabulationSheet = async (req, res) => {
         // Convert course_rows to JSON
         const parsedCourseRows = JSON.parse(JSON.stringify(course_rows));
         console.log(parsedCourseRows);
+        // var result =parsedRowsrows.map( itm=>({
+        //     ...parsedCourseRows.find((item)=>(
+        //         itm.course_id===item.course_id 
+        //     )&&item,  ...itm)
+        // }) );
 
+        const mergeArrays = (arr1, arr2) => {
+            return arr1.map(obj1 => {
+                const obj2 = arr2.find(obj => obj.course_id === obj1.course_id);
+                if (obj2) {
+                    return { ...obj1, ...obj2 }; // Merge obj1 and obj2
+                } else {
+                    return obj1; // Return obj1 as is if no matching id found in arr2
+                }
+            });
+        };
+        
+        // Merge arrays based on id matching
+        const mergedArray = mergeArrays(parsedRows, parsedCourseRows);
+        console.log(mergedArray);
+        // console.log(result);
         res.status(200).json({
             "message": "List of Students",
-            "rows": parsedRows,
+            "rows": mergedArray,
             "course_rows": parsedCourseRows
         });
     } catch (err) {
