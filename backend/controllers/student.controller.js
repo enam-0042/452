@@ -461,8 +461,8 @@ const getTabulationSheet = (req, res) => {
     let { usn, session } = req.query;
     console.log(req.reg_no);
     console.log(session+'    fsdfs');
-    var query = `SELECT * FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' AND tbl_result_theory.reg_no='${student_id}';`;
-
+    var query = `SELECT reg_no, course_id, semester, letter_grade, gpa  FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' AND tbl_result_theory.reg_no='${student_id}';`;
+    // var query1= 'SELECT * '
     db.query(query, (err, rows) => {
         // console.log(rows);
 

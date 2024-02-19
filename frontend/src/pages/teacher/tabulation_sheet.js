@@ -57,6 +57,7 @@ export default function TabulationSheet() {
                                 })
                             }
                         }
+                        console.log(list)
                         if (flag === 0) {
                             item.push({
                                 reg_no: list[i].reg_no,

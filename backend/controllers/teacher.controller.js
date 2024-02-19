@@ -421,32 +421,138 @@ const putTeacherApproval = (req, res) => {
         }
     })
 }
+/// here begin
+// const getTabulationSheet = (req, res) => {
+//     let { teacher_id, dept_id } = req;
+//     let { usn, session } = req.query;
+//     console.log(req.body);
+//     console.log(session+'    fsdfs');
+//     // var query = `SELECT * FROM tbl_result WHERE tbl_result.session = "${session}" AND tbl_result.USN = '${usn}';`;
+//     var query = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' ;`;
+//     var query1= 'SELECT  course_id, course_credit from tbl_course '
+//     db.query(query, (err, rows) => {
+//         // console.log(rows);
 
-const getTabulationSheet = (req, res) => {
-    let { teacher_id, dept_id } = req;
-    let { usn, session } = req.query;
-    console.log(req.body);
-    console.log(session+'    fsdfs');
-    // var query = `SELECT * FROM tbl_result WHERE tbl_result.session = "${session}" AND tbl_result.USN = '${usn}';`;
-    var query = `SELECT * FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' ;`;
+//         if (!err) {
+//             rows=JSON.parse(JSON.stringify(rows));
+//              console.log(rows)
+//              db.query(query1, (err1, course_rows) => {
+//                 if(!err1){
+//                     course_rows==JSON.parse(JSON.stringify(course_rows));
+//                     console.log(course_rows);
+//                 }
+//                 else{
+//                     res.status(200).json({
+//                         "message": "List of students get failed",
+//                         err
+//                     })
+//                 }
+//              })
 
-    db.query(query, (err, rows) => {
-        // console.log(rows);
 
-        if (!err) {
-             console.log(rows)
-            res.status(200).json({
-                "message": "List of Students",
-                rows
-            })
-        } else {
-            res.status(200).json({
-                "message": "List of students get failed",
-                err
-            })
-        }
-    })
+//             res.status(200).json({
+//                 "message": "List of Students",
+//                 rows
+//             })
+//         } else {
+//             res.status(200).json({
+//                 "message": "List of students get failed",
+//                 err
+//             })
+//         }
+//     })
+// }
+const getTabulationSheet = async (req, res) => {
+    try {
+        
+        let { teacher_id, dept_id } = req;
+        let { usn, session } = req.query;
+        
+        // Create promises for both database queries
+        const query = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' ;`;
+        const query1 = 'SELECT  * from tbl_course ';
+
+        // Execute both queries concurrently using Promise.all
+        const [rows, course_rows] = await Promise.all([
+            executeQuery(query),
+            executeQuery(query1)
+        ]);
+        console.log(rows);
+        // Convert rows to JSON
+        const parsedRows = JSON.parse(JSON.stringify(rows));
+        console.log(parsedRows);
+
+        // Convert course_rows to JSON
+        const parsedCourseRows = JSON.parse(JSON.stringify(course_rows));
+        console.log(parsedCourseRows);
+
+        res.status(200).json({
+            "message": "List of Students",
+            "rows": parsedRows,
+            "course_rows": parsedCourseRows
+        });
+    } catch (err) {
+        res.status(500).json({
+            "message": "List of students get failed",
+            "error": err
+        });
+    }
 }
+
+// Function to execute database query as a promise
+const executeQuery = (query) => {
+    return new Promise((resolve, reject) => {
+        db.query(query, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+};
+
+/// here end
+
+
+
+// const getTabulationSheet = async (req, res) => {
+//     try {
+//         let { teacher_id, dept_id } = req;
+//         let { usn, session } = req.query;
+//         console.log(req.body);
+//         console.log(session + '    fsdfs');
+
+//         // Create a promise for the database query
+//         var query = `SELECT reg_no, course_id, semester, letter_grade, gpa  FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' AND tbl_result_theory.reg_no='${student_id}';`;
+//         const rows = await db.query(query); // Await the result of the promise
+
+//         console.log(rows);
+
+//         res.status(200).json({
+//             "message": "List of Students",
+//             "rows": rows // Send rows as JSON
+//         });
+//     } catch (err) {
+//         res.status(500).json({
+//             "message": "List of students get failed",
+//             "error": err // Send error as JSON
+//         });
+//     }
+// }
+
+// Function to execute database query as a promise
+// const executeQuery = (query) => {
+//     return new Promise((resolve, reject) => {
+//         db.query(query, (err, rows) => {
+//             if (err) {
+//                 reject(err);
+//             } else {
+//                 resolve(rows);
+//             }
+//         });
+//     });
+// };
 
 const recoverPassword = async (req, res) => {
     let { password, confirm_password } = req.body;
