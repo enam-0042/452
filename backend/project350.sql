@@ -801,13 +801,7 @@ CREATE TABLE `tbl_teacher` (
 --
 
 INSERT INTO `tbl_teacher` (`teacher_id`, `teacher_name`, `dept_id`, `teacher_email`, `teacher_phone`, `designation`, `password`) VALUES
-(1, 'Raihan Ullah', 100, 'raihan@iict.sust.edu', '01799999999', 'Lecturer', '$2b$10$OQ1c08ntRDXRKx6QbPO.wOASheoz6Hjr6gU664FNJZEYKsdWN/r06'),
-(2, 'Dr. Ahsan Habib', 100, 'ahsan-habib@iict.sust.edu', '01700000009', 'Assistant Professor', '$2b$10$ZeJP2XIX69U1iM/r9bEp4.0QFmNctFAiK8ik1B.GpRjEchITF8Uuy'),
-(3, 'Fazle Mohammed Tawsif', 100, 'tawsif-iict@sust.edu', '01841857838', 'Assistant Professor', '$2b$10$f2xzYK7j7hoYCsl7Zi67ae5uPaObxz7yJKO6l.5qeVzX6UN7bINsy'),
-(4, 'Dr. Md Forhad Rabbi, SMIEEE', 101, 'frabbi-cse@sust.edu', '01844175805', 'Professor', '$2b$10$6ar.bPjYTWO1JcwMAW4AW.cYkv807Jpt8m921xchpIcHAGLk2PWQK'),
-(5, 'Partha Protim Paul', 100, 'partha-iict@sust.edu', '01701001168', 'Lecturer', '$2b$10$WI93tUlAkrei8TKFROVgEueAA9UdLkoSdiuAfNwtRPvHYmhIlTxw.'),
-(6, 'Ms Sayma Sultana Chowdhury', 100, 'muna.sust@gmail.com', '017315797', 'Assistant Professor', '$2b$10$nQSfq/D7wTodQ5LgcuUdCulPY3H4y8L9JjUQCpP/oNrohMtKjP3u2'),
-(7, 'Prof M. Jahirul Islam, PhD., PEng.', 100, 'jahir-cse@sust.edu', '+880-821-726695', 'Director', '$2b$10$I7UenUD8JNPFnBpAcwR0reP2e3e2iQq0ZPMd9N2tISyedSC.4V3jC');
+(7, 'Prof M. Jahirul Islam, PhD., PEng.', 100, 'jahir-cse@sust.edu', '+880-821-726695', 'Depthead', '$2b$10$I7UenUD8JNPFnBpAcwR0reP2e3e2iQq0ZPMd9N2tISyedSC.4V3jC');
 
 -- --------------------------------------------------------
 

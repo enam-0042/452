@@ -455,6 +455,31 @@ const studentLogin = async (req, res) => {
     })
 }
 
+// here tabulation
+const getTabulationSheet = (req, res) => {
+    let { reg_no, dept_id } = req;
+    let { usn, session } = req.query;
+    console.log(req.reg_no);
+    console.log(session+'    fsdfs');
+    var query = `SELECT * FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' AND tbl_result_theory.reg_no='${student_id}';`;
+
+    db.query(query, (err, rows) => {
+        // console.log(rows);
+
+        if (!err) {
+            console.log(rows);
+            res.status(200).json({
+                "message": "List of Courses",
+                rows
+            })
+        } else {
+            res.status(200).json({
+                "message": "List of students get failed",
+                err
+            })
+        }
+    })
+}
 
 module.exports = {
     getStudentDetails,
@@ -466,5 +491,6 @@ module.exports = {
     recoverPassword,
     changePassword,
     studentSignUp,
-    studentLogin
+    studentLogin,
+    getTabulationSheet,
 };

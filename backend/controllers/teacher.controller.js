@@ -425,13 +425,16 @@ const putTeacherApproval = (req, res) => {
 const getTabulationSheet = (req, res) => {
     let { teacher_id, dept_id } = req;
     let { usn, session } = req.query;
-
-    var query = `SELECT * FROM tbl_result WHERE tbl_result.session = "${session}" AND tbl_result.USN = '${usn}';`;
+    console.log(req.body);
+    console.log(session+'    fsdfs');
+    // var query = `SELECT * FROM tbl_result WHERE tbl_result.session = "${session}" AND tbl_result.USN = '${usn}';`;
+    var query = `SELECT * FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' ;`;
 
     db.query(query, (err, rows) => {
         // console.log(rows);
 
         if (!err) {
+             console.log(rows)
             res.status(200).json({
                 "message": "List of Students",
                 rows
