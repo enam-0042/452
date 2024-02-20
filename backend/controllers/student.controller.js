@@ -456,30 +456,100 @@ const studentLogin = async (req, res) => {
 }
 
 // here tabulation
-const getTabulationSheet = (req, res) => {
-    let { reg_no, dept_id } = req;
-    let { usn, session } = req.query;
-    console.log(req.reg_no);
-    console.log(session+'    fsdfs');
-    var query = `SELECT reg_no, course_id, semester, letter_grade, gpa  FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' AND tbl_result_theory.reg_no='${student_id}';`;
-    // var query1= 'SELECT * '
-    db.query(query, (err, rows) => {
-        // console.log(rows);
+// const getTabulationSheet = (req, res) => {
+//     let { reg_no, dept_id } = req;
+//     let { usn, session } = req.query;
+//     console.log(req.reg_no);
+//     console.log(session+'    fsdfs');
+//     var query = `SELECT reg_no, course_id, semester, letter_grade, gpa  FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' AND tbl_result_theory.reg_no='${student_id}';`;
+//     // var query1= 'SELECT * '
+//     db.query(query, (err, rows) => {
+//         // console.log(rows);
 
-        if (!err) {
-            console.log(rows);
-            res.status(200).json({
-                "message": "List of Courses",
-                rows
-            })
-        } else {
-            res.status(200).json({
-                "message": "List of students get failed",
-                err
-            })
-        }
-    })
+//         if (!err) {
+//             console.log(rows);
+//             res.status(200).json({
+//                 "message": "List of Courses",
+//                 rows
+//             })
+//         } else {
+//             res.status(200).json({
+//                 "message": "List of students get failed",
+//                 err
+//             })
+//         }
+//     })
+// }
+const getTabulationSheet = async (req, res) => {
+    try {
+        console.log('fsklfslfskjfkslfskl;')
+        // console.log(req.reg_no+'dfs');
+        const reg_no=req.reg_no;
+        const dept_id=req.dept_id;
+        // let { reg_no, dept_id } = req.body;
+        let { usn, session } = req.query;
+        // const x=JSON.parse(JSON.stringify(req));
+        // console.log(dept_id);
+        console.log(req.query);
+        // Create promises for both database queries
+        const query = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' ;`;
+        const query1 = 'SELECT  course_id, course_credits from tbl_course ';
+
+        const [rows,course_rows] = await Promise.all([
+            executeQuery(query),
+            executeQuery(query1)
+        ]);
+        const parsedRows = JSON.parse(JSON.stringify(rows));
+        console.log(parsedRows);
+
+        const parsedCourseRows = JSON.parse(JSON.stringify(course_rows));
+        // var result =parsedRowsrows.map( itm=>({
+        //     ...parsedCourseRows.find((item)=>(
+        //         itm.course_id===item.course_id 
+        //     )&&item,  ...itm)
+        // }) );
+
+        const mergeArrays = (arr1, arr2) => {
+            return arr1.map(obj1 => {
+                const obj2 = arr2.find(obj => obj.course_id === obj1.course_id);
+                if (obj2) {
+                    return { ...obj1, ...obj2 }; // Merge obj1 and obj2
+                } else {
+                    return obj1; // Return obj1 as is if no matching id found in arr2
+                }
+            });
+        };
+        
+        // Merge arrays based on id matching
+        const mergedArray = mergeArrays(parsedRows, parsedCourseRows);
+        // console.log(pa);
+        // console.log(result);
+        res.status(200).json({
+            "message": "List of Students",
+            "rows": mergedArray,
+            "course_rows": parsedCourseRows
+        });
+    } catch (err) {
+        res.status(500).json({
+            "message": "List of students get failed",
+            "error": err
+        });
+    }
 }
+
+// Function to execute database query as a promise
+const executeQuery = (query) => {
+    return new Promise((resolve, reject) => {
+        db.query(query, (err, rows) => {
+            if (err) {
+                console.log(err);
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+};
 
 module.exports = {
     getStudentDetails,

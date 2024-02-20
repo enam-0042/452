@@ -35,6 +35,7 @@ router.put('/student_signup', studentSignUp);
 
 router.post('/student_login', studentLogin);
 
-// router.post
+router.get('/studentTabulationSheet', getTabulationSheet);
 
+// router.post
 module.exports = router;

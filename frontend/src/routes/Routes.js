@@ -28,6 +28,7 @@ import CourseReportGrade from '../pages/teacher/course_report_grade_letter'
 import CourseReportTotalMark from '../pages/teacher/course_report_total_mark'
 import FinalMarkEntry from '../pages/teacher/finalMarkEntry'
 import TabulationSheet from '../pages/teacher/tabulation_sheet'
+import StudentTabulationSheet from '../pages/student/tabulation_sheet'
 import TeacherLogin from '../pages/teacher/teacher_login'
 import TeacherProfile from '../pages/teacher/teacher_profile'
 import TeacherWorkspace from '../pages/teacher/teacher_workspace'
@@ -81,7 +82,10 @@ export default function PageRoutes() {
           <Route path="/student_workspace/admit_card" element={<StudentsRoutesProtection>
             <StudentAdmitCard />
           </StudentsRoutesProtection>} />
-
+          {/* /////// here  */}
+          <Route path="/student_workspace/tabulation_sheet" element={<StudentsRoutesProtection>
+            <StudentTabulationSheet />
+          </StudentsRoutesProtection>} />
           {/* ///////////////////////////////////////////////////////////////////////// */}
 
           <Route path="/teacher_workspace" element={<TeacherRoutesProtection>

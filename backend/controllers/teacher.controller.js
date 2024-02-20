@@ -477,14 +477,14 @@ const getTabulationSheet = async (req, res) => {
             executeQuery(query),
             executeQuery(query1)
         ]);
-        console.log(rows);
+        // console.log(rows);
         // Convert rows to JSON
         const parsedRows = JSON.parse(JSON.stringify(rows));
-        console.log(parsedRows);
+        // console.log(parsedRows);
 
         // Convert course_rows to JSON
         const parsedCourseRows = JSON.parse(JSON.stringify(course_rows));
-        console.log(parsedCourseRows);
+        console.log('fshfskjfhksjhf');
         // var result =parsedRowsrows.map( itm=>({
         //     ...parsedCourseRows.find((item)=>(
         //         itm.course_id===item.course_id 

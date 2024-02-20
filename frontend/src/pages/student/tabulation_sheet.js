@@ -4,7 +4,7 @@ import Navbar from '../../components/navbar'
 import "./style/course_report_total_mark.css";
 import { PaginatedItemsTabulationSheet } from "./tabulationPagination";
 
-export default function TabulationSheet() {
+export default function StudentTabulationSheet() {
 
     const [disabledButton, setDisabledButton] = useState(false);
 
@@ -26,7 +26,7 @@ export default function TabulationSheet() {
 
         setDisabledButton(true);
         console.log(inputs);
-        axios.get("/tabulationSheet", {
+        axios.get("/studentTabulationSheet", {
             params: {
                 ...inputs,
             }
@@ -114,7 +114,7 @@ export default function TabulationSheet() {
                 : (
                     (
                         <div>
-                            <TeacherNavbar />
+                            <Navbar />
 
                             <div className="CourseEvaluationEntry-container">
                                 <div className="CourseEvaluationEntry-heading">

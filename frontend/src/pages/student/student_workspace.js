@@ -19,6 +19,9 @@ export default function StudentWorkspace() {
           <div className='Workspace-content'>
             <Link to="/student_workspace/course_registration"><FontAwesomeIcon icon={faEdit} /> Course Registration</Link>
             <Link to="/student_workspace/admit_card"><FontAwesomeIcon icon={faFileAlt} /> Get Admit Card</Link>
+            <Link to="/student_workspace/tabulation_sheet"><FontAwesomeIcon icon={faFileAlt} /> Get Tabulation Sheet</Link>
+
+           
             {/* <Link to="/student_workspace/view_result"><FontAwesomeIcon icon={faFileAlt} /> View Result</Link> */}
           </div>
         </div>
