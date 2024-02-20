@@ -484,8 +484,8 @@ const getTabulationSheet = async (req, res) => {
     try {
         console.log('fsklfslfskjfkslfskl;')
         // console.log(req.reg_no+'dfs');
-        const reg_no=req.reg_no;
-        const dept_id=req.dept_id;
+        const reg_no = req.reg_no;
+        const dept_id = req.dept_id;
         // let { reg_no, dept_id } = req.body;
         let { usn, session } = req.query;
         // const x=JSON.parse(JSON.stringify(req));
@@ -494,24 +494,24 @@ const getTabulationSheet = async (req, res) => {
         // Create promises for both database queries
         const query = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' AND tbl_result_theory.reg_no='${reg_no}' ;`;
         const query1 = 'SELECT  course_id, course_title, course_credits from tbl_course ';
-        
+
         const querylab = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_lab WHERE tbl_result_lab.session = "${session}" AND tbl_result_lab.USN = '${usn}' AND tbl_result_lab.reg_no='${reg_no}' ;`;
         const query1lab = 'SELECT  course_id, course_title, course_credits from tbl_course ';
 
-        const [rows,course_rows] = await Promise.all([
+        const [rows, course_rows] = await Promise.all([
             executeQuery(query),
             executeQuery(query1)
         ]);
         const parsedRows = JSON.parse(JSON.stringify(rows));
         const parsedCourseRows = JSON.parse(JSON.stringify(course_rows));
 
-        const [labrows,course_labrows] = await Promise.all([
+        const [labrows, course_labrows] = await Promise.all([
             executeQuery(querylab),
             executeQuery(query1lab)
         ]);
         const parsedRowslab = JSON.parse(JSON.stringify(labrows));
         const parsedCourseRowslab = JSON.parse(JSON.stringify(course_labrows));
-       
+
 
         const mergeArrays = (arr1, arr2) => {
             return arr1.map(obj1 => {
@@ -523,11 +523,21 @@ const getTabulationSheet = async (req, res) => {
                 }
             });
         };
-        
+
         // Merge arrays based on id matching
-        const mergedArray = mergeArrays(parsedRows, parsedCourseRows);
-        const mergedArraylab=mergeArrays(parsedRowslab, parsedCourseRowslab);
-        const finalArray=[...mergedArray,...mergedArraylab];
+        let mergedArray = mergeArrays(parsedRows, parsedCourseRows);
+        let mergedArraylab = mergeArrays(parsedRowslab, parsedCourseRowslab);
+        mergedArray = JSON.parse(JSON.stringify(mergedArray));
+        mergedArraylab = JSON.parse(JSON.stringify(mergedArraylab));
+
+        function addnewparameter(arr, type, val) {
+            return arr.map(item =>
+                ({ ...item, [type]: val }))
+        };
+        mergedArray = addnewparameter(mergedArray, "course_type", "theory");
+        mergedArraylab = addnewparameter(mergedArraylab, "course_type", "lab");
+
+        const finalArray = [...mergedArray, ...mergedArraylab];
         // console.log(pa);
         console.log(finalArray);
 

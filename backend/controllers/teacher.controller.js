@@ -464,10 +464,10 @@ const putTeacherApproval = (req, res) => {
 // }
 const getTabulationSheet = async (req, res) => {
     try {
-        
+
         let { teacher_id, dept_id } = req;
         let { usn, session } = req.query;
-        
+
         // Create promises for both database queries
         const query = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' ;`;
         const query1 = 'SELECT  course_id, course_credits from tbl_course ';
@@ -503,7 +503,7 @@ const getTabulationSheet = async (req, res) => {
         //         }
         //     });
         // };
-        
+
         // // Merge arrays based on id matching
         // const mergedArray = mergeArrays(parsedRows, parsedCourseRows);
         // console.log(mergedArray);
@@ -513,21 +513,21 @@ const getTabulationSheet = async (req, res) => {
         //     "rows": mergedArray,
         //     "course_rows": parsedCourseRows
         // });
-        
-        const [rows,course_rows] = await Promise.all([
+
+        const [rows, course_rows] = await Promise.all([
             executeQuery(query),
             executeQuery(query1)
         ]);
         const parsedRows = JSON.parse(JSON.stringify(rows));
         const parsedCourseRows = JSON.parse(JSON.stringify(course_rows));
 
-        const [labrows,course_labrows] = await Promise.all([
+        const [labrows, course_labrows] = await Promise.all([
             executeQuery(querylab),
             executeQuery(query1lab)
         ]);
         const parsedRowslab = JSON.parse(JSON.stringify(labrows));
         const parsedCourseRowslab = JSON.parse(JSON.stringify(course_labrows));
-        
+
 
         const mergeArrays = (arr1, arr2) => {
             return arr1.map(obj1 => {
@@ -539,11 +539,23 @@ const getTabulationSheet = async (req, res) => {
                 }
             });
         };
-        
+
         // Merge arrays based on id matching
-        const mergedArray = mergeArrays(parsedRows, parsedCourseRows);
-        const mergedArraylab=mergeArrays(parsedRowslab, parsedCourseRowslab);
-        const finalArray=[...mergedArray,...mergedArraylab];
+        let mergedArray = mergeArrays(parsedRows, parsedCourseRows);
+        mergedArray = JSON.parse(JSON.stringify(mergedArray));
+        function addnewparameter(arr, type, val) {
+            return arr.map(item =>
+                ({ ...item, [type]: val }))
+        };
+        mergedArray = addnewparameter(mergedArray, "course_type", "theory");
+
+
+        let mergedArraylab = mergeArrays(parsedRowslab, parsedCourseRowslab);
+
+        mergedArraylab = JSON.parse(JSON.stringify(mergedArraylab));
+        mergedArraylab = addnewparameter(mergedArraylab, "course_type", "lab");
+
+        const finalArray = [...mergedArray, ...mergedArraylab];
         // console.log(pa);
         console.log(finalArray);
         res.status(200).json({
