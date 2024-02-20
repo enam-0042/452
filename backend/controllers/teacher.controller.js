@@ -471,25 +471,63 @@ const getTabulationSheet = async (req, res) => {
         // Create promises for both database queries
         const query = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' ;`;
         const query1 = 'SELECT  course_id, course_credits from tbl_course ';
+        const querylab = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_lab WHERE tbl_result_lab.session = "${session}" AND tbl_result_lab.USN = '${usn}' ;`;
+        const query1lab = 'SELECT  course_id, course_credits from tbl_course ';
 
-        // Execute both queries concurrently using Promise.all
-        const [rows, course_rows] = await Promise.all([
+        // // Execute both queries concurrently using Promise.all
+        // const [rows, course_rows] = await Promise.all([
+        //     executeQuery(query),
+        //     executeQuery(query1)
+        // ]);
+        // // console.log(rows);
+        // // Convert rows to JSON
+        // const parsedRows = JSON.parse(JSON.stringify(rows));
+        // // console.log(parsedRows);
+
+        // // Convert course_rows to JSON
+        // const parsedCourseRows = JSON.parse(JSON.stringify(course_rows));
+        // console.log('fshfskjfhksjhf');
+        // // var result =parsedRowsrows.map( itm=>({
+        // //     ...parsedCourseRows.find((item)=>(
+        // //         itm.course_id===item.course_id 
+        // //     )&&item,  ...itm)
+        // // }) );
+
+        // const mergeArrays = (arr1, arr2) => {
+        //     return arr1.map(obj1 => {
+        //         const obj2 = arr2.find(obj => obj.course_id === obj1.course_id);
+        //         if (obj2) {
+        //             return { ...obj1, ...obj2 }; // Merge obj1 and obj2
+        //         } else {
+        //             return obj1; // Return obj1 as is if no matching id found in arr2
+        //         }
+        //     });
+        // };
+        
+        // // Merge arrays based on id matching
+        // const mergedArray = mergeArrays(parsedRows, parsedCourseRows);
+        // console.log(mergedArray);
+        // // console.log(result);
+        // res.status(200).json({
+        //     "message": "List of Students",
+        //     "rows": mergedArray,
+        //     "course_rows": parsedCourseRows
+        // });
+        
+        const [rows,course_rows] = await Promise.all([
             executeQuery(query),
             executeQuery(query1)
         ]);
-        // console.log(rows);
-        // Convert rows to JSON
         const parsedRows = JSON.parse(JSON.stringify(rows));
-        // console.log(parsedRows);
-
-        // Convert course_rows to JSON
         const parsedCourseRows = JSON.parse(JSON.stringify(course_rows));
-        console.log('fshfskjfhksjhf');
-        // var result =parsedRowsrows.map( itm=>({
-        //     ...parsedCourseRows.find((item)=>(
-        //         itm.course_id===item.course_id 
-        //     )&&item,  ...itm)
-        // }) );
+
+        const [labrows,course_labrows] = await Promise.all([
+            executeQuery(querylab),
+            executeQuery(query1lab)
+        ]);
+        const parsedRowslab = JSON.parse(JSON.stringify(labrows));
+        const parsedCourseRowslab = JSON.parse(JSON.stringify(course_labrows));
+        
 
         const mergeArrays = (arr1, arr2) => {
             return arr1.map(obj1 => {
@@ -504,13 +542,16 @@ const getTabulationSheet = async (req, res) => {
         
         // Merge arrays based on id matching
         const mergedArray = mergeArrays(parsedRows, parsedCourseRows);
-        console.log(mergedArray);
-        // console.log(result);
+        const mergedArraylab=mergeArrays(parsedRowslab, parsedCourseRowslab);
+        const finalArray=[...mergedArray,...mergedArraylab];
+        // console.log(pa);
+        console.log(finalArray);
         res.status(200).json({
             "message": "List of Students",
-            "rows": mergedArray,
-            "course_rows": parsedCourseRows
+            "rows": finalArray,
+            // "course_rows": parsedCourseRows
         });
+
     } catch (err) {
         res.status(500).json({
             "message": "List of students get failed",

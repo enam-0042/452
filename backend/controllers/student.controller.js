@@ -492,22 +492,26 @@ const getTabulationSheet = async (req, res) => {
         // console.log(dept_id);
         console.log(req.query);
         // Create promises for both database queries
-        const query = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' ;`;
-        const query1 = 'SELECT  course_id, course_credits from tbl_course ';
+        const query = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_theory WHERE tbl_result_theory.session = "${session}" AND tbl_result_theory.USN = '${usn}' AND tbl_result_theory.reg_no='${reg_no}' ;`;
+        const query1 = 'SELECT  course_id, course_title, course_credits from tbl_course ';
+        
+        const querylab = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_lab WHERE tbl_result_lab.session = "${session}" AND tbl_result_lab.USN = '${usn}' AND tbl_result_lab.reg_no='${reg_no}' ;`;
+        const query1lab = 'SELECT  course_id, course_title, course_credits from tbl_course ';
 
         const [rows,course_rows] = await Promise.all([
             executeQuery(query),
             executeQuery(query1)
         ]);
         const parsedRows = JSON.parse(JSON.stringify(rows));
-        console.log(parsedRows);
-
         const parsedCourseRows = JSON.parse(JSON.stringify(course_rows));
-        // var result =parsedRowsrows.map( itm=>({
-        //     ...parsedCourseRows.find((item)=>(
-        //         itm.course_id===item.course_id 
-        //     )&&item,  ...itm)
-        // }) );
+
+        const [labrows,course_labrows] = await Promise.all([
+            executeQuery(querylab),
+            executeQuery(query1lab)
+        ]);
+        const parsedRowslab = JSON.parse(JSON.stringify(labrows));
+        const parsedCourseRowslab = JSON.parse(JSON.stringify(course_labrows));
+       
 
         const mergeArrays = (arr1, arr2) => {
             return arr1.map(obj1 => {
@@ -522,12 +526,16 @@ const getTabulationSheet = async (req, res) => {
         
         // Merge arrays based on id matching
         const mergedArray = mergeArrays(parsedRows, parsedCourseRows);
+        const mergedArraylab=mergeArrays(parsedRowslab, parsedCourseRowslab);
+        const finalArray=[...mergedArray,...mergedArraylab];
         // console.log(pa);
-        // console.log(result);
+        console.log(finalArray);
+
+        console.log(mergedArraylab);
         res.status(200).json({
             "message": "List of Students",
-            "rows": mergedArray,
-            "course_rows": parsedCourseRows
+            "rows": finalArray,
+            // "course_rows": parsedCourseRows
         });
     } catch (err) {
         res.status(500).json({
