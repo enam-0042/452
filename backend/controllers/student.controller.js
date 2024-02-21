@@ -497,6 +497,7 @@ const getTabulationSheet = async (req, res) => {
 
         const querylab = `SELECT reg_no, course_id, semester, letter_grade, gpa FROM tbl_result_lab WHERE tbl_result_lab.session = "${session}" AND tbl_result_lab.USN = '${usn}' AND tbl_result_lab.reg_no='${reg_no}' ;`;
         const query1lab = 'SELECT  course_id, course_title, course_credits from tbl_course ';
+        // const querystd = `SELECT std_name, session from tbl_student where tbl_student.reg_no='${reg_no}' ;`;
 
         const [rows, course_rows] = await Promise.all([
             executeQuery(query),

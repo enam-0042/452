@@ -5,78 +5,105 @@ import ReactPaginate from 'react-paginate';
 import './style/tabulationPagination.css';
 
 function Itemstabulation({ currentItems, listOfStudent }) {
-
+    console.log('blfjksfsk')
+    // console.log(currentItems);
+    let items = currentItems[0].course_list;
+    let totalCredit = 0;
+    let gpaMcredits = 0;
+    let totalGPA = 0;
+    console.log(listOfStudent);
     return (
         <>
             <table className="tablePagination">
                 <thead>
                     <tr>
-                        <th>SL</th>
-                        <th>Registration No.</th>
-                        <th>Session</th>
-                        <th>
-                            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                <div style={{ marginRight: '15px', marginTop: '20px', marginLeft: '10px' }}>
-                                    Student's Name
-                                </div>
-                                <div>
-                                    Course ID =<br />
-                                    Credit = <br />
-                                    Semester =<br />
-                                </div>
-                            </div>
-                        </th>
-                        {currentItems[0].course_list.map((item, key) => {
-                            return (<th>
-                                {item.course_id} <br />
-                                {item.course_credits} <br />
-                                {item.semester} <br />
-                            </th>)
-                        }
-                        )}
-                        <th>Total Credit</th>
-                        <th>Total GPA</th>
+                        <th>Course Code</th>
+                        <th>Course Title</th>
+                        <th>Type</th>
+                        <th>Credit</th>
+                        <th>Semester</th>
+                        <th>Gpa</th>
                         <th>Letter Grade</th>
+
                     </tr>
                 </thead>
                 <tbody>
-                    {currentItems.map((item, key) => {
-                        let totalCredit = 0;
-                        let gpaMcredits = 0;
-                        let totalGPA = 0
-                        return (<tr key={key}>
-                            <td>{key + 1}</td>
-                            <td>{item.reg_no}</td>
-                            <td>{item.session}</td>
-                            <td>{item.std_name}</td>
-                            {item.course_list.map((course) => {
-                                if (course.gpa !== 0) {
-                                    totalCredit += course.course_credits;
-                                    gpaMcredits += (course.course_credits * course.gpa);
-                                    totalGPA = (gpaMcredits / totalCredit).toFixed(2);
-                                }
-                                return (
-                                    <td>{course.gpa}   {course.letter_grade}</td>
-                                )
-                            })}
-                            <td>{totalCredit}</td>
-                            <td>{totalGPA}</td>
-                            <td>
-                                {totalGPA === 4 && "A+"}
-                                {(totalGPA >= 3.75 && totalGPA < 4) && "A"}
-                                {(totalGPA >= 3.5 && totalGPA < 3.75) && "A-"}
-                                {(totalGPA >= 3.25 && totalGPA < 3.5) && "B+"}
-                                {(totalGPA >= 3 && totalGPA < 3.25) && "B"}
-                                {(totalGPA >= 2.75 && totalGPA < 3) && "B-"}
-                                {(totalGPA >= 2.5 && totalGPA < 2.75) && "C+"}
-                                {(totalGPA >= 2.25 && totalGPA < 2.5) && "C"}
-                                {(totalGPA >= 2 && totalGPA < 2.25) && "C-"}
-                                {(totalGPA >= 0 && totalGPA < 2) && "F"}
-                            </td>
-                        </tr>)
+                    {
 
-                    }
-                    )}
+                        items.map((item, key) => {
+                            // let hell=currentItems[0].course_list
+                            // if (course.gpa !== 0) {
+                            //             totalCredit += course.course_credits;
+                            //             gpaMcredits += (course.course_credits * course.gpa);
+                            //             totalGPA = (gpaMcredits / totalCredit).toFixed(2);
+                            //         }
+
+                            if (item.gpa !== 0) {
+                                totalCredit += item.course_credits;
+                                gpaMcredits += (item.course_credits * item.gpa);
+                                totalGPA = (gpaMcredits / totalCredit).toFixed(2);
+                            }
+                            console.log(totalGPA);
+                            return (
+                                <>
+                                    <tr>
+                                        <td>
+                                            {item.course_id}
+                                        </td>
+                                        <td>
+                                            {item.course_title}
+                                        </td>
+                                        <td>
+                                            {item.course_type}
+                                        </td>
+                                        <td>
+                                            {item.course_credits}
+                                        </td>
+                                        <td>
+                                            {item.semester}
+                                        </td>
+                                        <td>
+                                            {item.gpa}
+                                        </td>
+                                        <td>
+                                            {item.letter_grade}
+                                        </td>
+                                    </tr>
+                                </>
+                                // <tr key={key}>
+                                //     <td>{key + 1}</td>
+                                //     <td>{item.reg_no}</td>
+                                //     <td>{item.session}</td>
+                                //     <td>{item.std_name}</td>
+                                //     {item.course_list.map((course) => {
+                                //         if (course.gpa !== 0) {
+                                //             totalCredit += course.course_credits;
+                                //             gpaMcredits += (course.course_credits * course.gpa);
+                                //             totalGPA = (gpaMcredits / totalCredit).toFixed(2);
+                                //         }
+                                //         return (
+                                //             <td>{course.gpa}   {course.letter_grade}</td>
+                                //         )
+                                //     })}
+                                //     <td>{totalCredit}</td>
+                                //     <td>{totalGPA}</td>
+                                //     <td>
+                                //         {totalGPA === 4 && "A+"}
+                                //         {(totalGPA >= 3.75 && totalGPA < 4) && "A"}
+                                //         {(totalGPA >= 3.5 && totalGPA < 3.75) && "A-"}
+                                //         {(totalGPA >= 3.25 && totalGPA < 3.5) && "B+"}
+                                //         {(totalGPA >= 3 && totalGPA < 3.25) && "B"}
+                                //         {(totalGPA >= 2.75 && totalGPA < 3) && "B-"}
+                                //         {(totalGPA >= 2.5 && totalGPA < 2.75) && "C+"}
+                                //         {(totalGPA >= 2.25 && totalGPA < 2.5) && "C"}
+                                //         {(totalGPA >= 2 && totalGPA < 2.25) && "C-"}
+                                //         {(totalGPA >= 0 && totalGPA < 2) && "F"}
+                                //     </td>
+                                // </tr>
+                            )
+
+                        }
+                        )}
 
                 </tbody>
             </table>
@@ -113,7 +140,7 @@ function Itemstabulation({ currentItems, listOfStudent }) {
 }
 
 export function PaginatedItemsTabulationSheet({ itemsPerPage, listOfStudent }) {
-
+    console.log('herro');
     console.log(listOfStudent);
 
     const [itemOffset, setItemOffset] = useState(0);

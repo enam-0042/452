@@ -33,7 +33,7 @@ export default function StudentTabulationSheet() {
         })
             .then((res) => res.data)
             .then((data) => {
-                 console.log(data.rows);
+                console.log(data.rows);
                 if (data.rows.length === 0) {
                     alert("Student not found!")
                 }
@@ -53,11 +53,12 @@ export default function StudentTabulationSheet() {
                                     course_type: list[i].course_type,
                                     course_credits: list[i].course_credits,
                                     gpa: list[i].gpa,
-                                    letter_grade: list[i].letter_grade
+                                    letter_grade: list[i].letter_grade,
+                                    course_title: list[i].course_title
                                 })
                             }
                         }
-                        console.log(list)
+
                         if (flag === 0) {
                             item.push({
                                 reg_no: list[i].reg_no,
@@ -71,9 +72,13 @@ export default function StudentTabulationSheet() {
                                     course_type: list[i].course_type,
                                     course_credits: list[i].course_credits,
                                     gpa: list[i].gpa,
-                                    letter_grade: list[i].letter_grade
+                                    letter_grade: list[i].letter_grade,
+                                    course_title: list[i].course_title
+
                                 }]
                             })
+                            console.log('this is list from sheet');
+                            console.log(list)
                         }
                     }
                     var temp = [...item];
@@ -137,7 +142,7 @@ export default function StudentTabulationSheet() {
                                                 <option value="2021-2">2021-2</option>
                                                 <option value="2022-1">2022-1</option>
                                                 <option value="2022-2">2022-2</option>
-                                              
+
                                             </select>
                                         </div>
                                         <div>
@@ -149,7 +154,7 @@ export default function StudentTabulationSheet() {
                                                 }}
                                             >
                                                 <option value="">Session</option>
-                                               
+
                                                 <option value='2019-2020'>2019-2020</option>
                                                 <option value='2020-2021'>2020-2021</option>
                                                 <option value='2021-2022'>2021-2022</option>
